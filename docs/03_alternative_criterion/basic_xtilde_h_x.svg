@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="100%"
+   height="100%"
+   id="svg2">
+  <metadata
+     id="metadata47">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4">
+    <marker
+       markerUnits="strokeWidth"
+       refX="1"
+       refY="5"
+       markerWidth="4"
+       markerHeight="3"
+       orient="auto"
+       viewBox="0 0 10 10"
+       id="myArrowHeadMarker">
+      <polyline
+         points="0,0 10,5 0,10 1,5"
+         fill="black"
+         id="polyline7"
+         style="fill:#000000" />
+    </marker>
+  </defs>
+  <circle
+     cx="90"
+     cy="40"
+     r="15"
+     id="circle9"
+     style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:1" />
+  <circle
+     cx="40"
+     cy="90"
+     r="15"
+     id="circle13"
+     style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:1" />
+  <circle
+     cx="140"
+     cy="90"
+     r="15"
+     id="circle15"
+     style="fill:#ffffff;fill-opacity:0;stroke:#000000;stroke-width:1" />
+  <line
+     x1="50.556301"
+     y1="79.443695"
+     x2="74.537399"
+     y2="55.462597"
+     id="line19"
+     style="stroke:#000000;stroke-width:1.89939821;marker-end:url(#myArrowHeadMarker)" />
+  <line
+     x1="100.56257"
+     y1="50.562565"
+     x2="124.87207"
+     y2="74.532883"
+     id="line21"
+     style="stroke:#000000;stroke-width:1.91192925;marker-end:url(#myArrowHeadMarker)" />
+  <g
+     transform="translate(-0.39413794,3.9413794)"
+     id="g27"
+     style="font-size:13px;font-family:STKaiti">
+    <text
+       x="36.576553"
+       y="91.817589"
+       id="text29"
+       style="font-size:16px;fill:#000000">x</text>
+    <text
+       x="43"
+       y="96"
+       id="text31"
+       style="fill:#000000" />
+  </g>
+  <text
+     x="85.527931"
+     y="131.26181"
+     id="text3024"
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><tspan
+       x="85.527931"
+       y="131.26181"
+       id="tspan3026" /></text>
+  <g
+     transform="translate(51.237933,61.091381)"
+     id="g3052"
+     style="font-size:13px;font-family:STKaiti">
+    <text
+       x="-16.237932"
+       y="27.573101"
+       id="text3054"
+       style="fill:#000000">~</text>
+    <text
+       x="43"
+       y="96"
+       id="text3056"
+       style="fill:#000000" />
+  </g>
+  <g
+     transform="translate(99.716904,2.3648276)"
+     id="g3058"
+     style="font-size:13px;font-family:STKaiti">
+    <text
+       x="36.576553"
+       y="91.817589"
+       id="text3060"
+       style="font-size:16px;fill:#000000">x</text>
+    <text
+       x="43"
+       y="96"
+       id="text3062"
+       style="fill:#000000" />
+  </g>
+  <g
+     transform="translate(49.661381,-46.902415)"
+     id="g3077"
+     style="font-size:13px;font-family:STKaiti">
+    <text
+       x="36.182415"
+       y="92.211723"
+       id="text3079"
+       style="font-size:16px;fill:#000000">h</text>
+    <text
+       x="43"
+       y="96"
+       id="text3081"
+       style="fill:#000000" />
+  </g>
+</svg>

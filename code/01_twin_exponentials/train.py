@@ -15,7 +15,7 @@ import cPickle
 data = cPickle.load(open(data_filename, "r"))
 #X = data["X"]
 # cut the size for testing
-#data['X'] = data['X'][0:1000]
+data['X'] = data['X'][0:1000]
 
 # put a function here that samples H from X
 
@@ -24,6 +24,7 @@ data = cPickle.load(open(data_filename, "r"))
 import theano
 import theano.tensor as T
 
+import numpy as np
 
 want_true_values = False
 if want_true_values:
@@ -166,6 +167,71 @@ def one_iteration_SVD(X, learning_rate = 1.0):
                                                                       g_params[0].get_value(),
                                                                       g_params[1].get_value())
 
+#for iter in range(1000):
+#    one_iteration_SVD(data['X'], 0.1)
 
-for iter in range(1000):
-    one_iteration_SVD(data['X'], 0.1)
+
+def plot_gradient_trajectory_g_params(X, plot_filename):
+
+    import matplotlib
+    # This has already been specified in .scitools.cfg
+    # so we don't need to explicitly pick 'Agg'.
+    # matplotlib.use('Agg')
+    import pylab
+    import matplotlib.pyplot as plt
+
+    N_a, N_b = 10, 10
+
+    A, B = np.meshgrid(np.linspace(0.5, 2.0, N_a),
+                       np.linspace(0.5, 2.0, N_b))
+
+    Z = np.zeros(B.shape)
+    # values Z[n_b, n_a] will be set
+    # through two for loops
+    grad_ZA = np.zeros(A.shape)
+    grad_ZB = np.zeros(B.shape)
+
+    for n_a in range(N_a):
+        a = A[0, n_a]
+        g_params[0].set_value(a)
+
+        for n_b in range(N_b):
+            b = B[n_b, 0]
+            g_params[1].set_value(b)
+
+            H = sample_H_given_X(X)
+
+            # could be optimized better, but we're just losing a
+            # factor of two in the worst case
+            omega, qX = compute_omega_qX(X, H)
+            #print "mean log q(X) is %f" % np.log(qX).mean()
+            Z[n_b, n_a] = np.log(qX).mean()
+
+            _, _, J_log_ga, J_log_gb, _, _, J_log_fa, J_log_fb = func_compute_all(X, H)
+            subs_J_log_g = (omega.dot(J_log_ga).mean(axis=0), omega.dot(J_log_gb).mean(axis=0))
+            #subs_J_log_f = (omega.dot(J_log_fa).mean(axis=0), omega.dot(J_log_fb).mean(axis=0))
+
+            grad_ZA[n_a, n_b] = subs_J_log_g[0]
+            grad_ZB[n_a, n_b] = subs_J_log_g[1]
+
+        print "Done with a=%f." % a
+
+
+    dpi=150
+    pylab.hold(True)
+    plt.contourf(A, B, Z)
+    pylab.quiver(A, B, grad_ZA, grad_ZB)
+    pylab.draw()
+    pylab.savefig(plot_filename, dpi=dpi)
+    pylab.close()
+    print "Wrote %s." % (plot_filename,)
+
+
+plot_filename = os.path.join(output_path,
+                             "contourscatter_02_N%d_%0.2f_%0.2f_%0.2f_%0.2f.png" % (N,
+                                                                                    f_true_a, f_true_b,
+                                                                                    g_true_a, g_true_b))
+plot_gradient_trajectory_g_params(data['X'], plot_filename)
+
+
+
