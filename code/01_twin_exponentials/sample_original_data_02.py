@@ -23,7 +23,7 @@ def one_step(H,X):
     # X = g_b + X * np.random.exponential(scale=g_a, size=H.shape)
     # H = f_b + X * np.random.exponential(scale=f_a, size=X.shape)
     X = (1.0 - 2.0 * (np.random.rand(H.shape[0]) > 0.5)) * np.random.exponential(scale=(g_b + g_a*np.sqrt(np.abs(H))), size=H.shape)
-    H = f_b + np.sqrt(np.abs(X)) * np.random.normal(1.0, size=X.shape)
+    H = f_b + np.sqrt(f_a * np.abs(X)) * np.random.normal(1.0, size=X.shape)
     return (H,X)
 
 X = np.ones((N,))
