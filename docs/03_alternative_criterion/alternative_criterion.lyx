@@ -1,0 +1,872 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\def\eqd{\,{\buildrel d \over =}\,} 
+\def\eqras{\,{\buildrel a.s. \over \longrightarrow}\,} 
+\def\eqdef{\,{\buildrel def \over =}\,} 
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section*
+Alternative criterion for training GSN
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $ $
+\end_inset
+
+Guillaume Alain, 2014 Jan 10
+\end_layout
+
+\begin_layout Subsection*
+Reminder
+\end_layout
+
+\begin_layout Standard
+The original setup for general denoising auto-encoders uses the decomposition
+ of a joint 
+\begin_inset Formula $(X,H)$
+\end_inset
+
+ into two factors
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+p(X,H)=p(X)p(H|X)=p(H)p(X|H)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for which we use samples drawn from the left-hand side to train an approximation
+ to 
+\begin_inset Formula $p(X|H)$
+\end_inset
+
+ on the right-hand side.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We have experimental samples 
+\begin_inset Formula $x\in D$
+\end_inset
+
+ drawn from 
+\begin_inset Formula $p(X)$
+\end_inset
+
+.
+ We pick the 
+\begin_inset Formula $p(H|X)$
+\end_inset
+
+ ourselves to be basically anything from which we can sample easily.
+ This choice induces a distribution of samples 
+\begin_inset Formula $(x,h)$
+\end_inset
+
+ drawn from 
+\begin_inset Formula $p(x,h)$
+\end_inset
+
+, which also counts as samples drawn from 
+\begin_inset Formula $p(H)$
+\end_inset
+
+ if we drop the first component.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We propose to learn a representation 
+\begin_inset Formula $q(x|h)$
+\end_inset
+
+ that aims to match 
+\begin_inset Formula $p(x|h)$
+\end_inset
+
+.
+ We could write 
+\begin_inset Formula $q_{\theta}(x|h)$
+\end_inset
+
+, but we can omit the parameter 
+\begin_inset Formula $\theta$
+\end_inset
+
+ when we know that we are training 
+\begin_inset Formula $q$
+\end_inset
+
+.
+ We want to have that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{equation}
+\forall x\forall h,\hspace{1em}p(x)p(h|x)=p(h){\color{blue}q_{\theta}(x|h)}\label{eq:joint_matching_with_q}
+\end{equation}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One way to go about this is to try to minimize 
+\begin_inset Formula $\textrm{KL}(p(x)p(h|x)\|p(h){\color{blue}q(x|h)})$
+\end_inset
+
+.
+ The exact solution for this will get us a 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula ${\color{blue}q(x|h)}$
+\end_inset
+
+ equal in distribution to 
+\begin_inset Formula $p(x|h)$
+\end_inset
+
+ for every 
+\begin_inset Formula $h$
+\end_inset
+
+.
+ It leads to the maximization of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{N}\sum_{(x_{n},h_{n})}\left[\log{\color{blue}q(x_{n}|h_{n})}\right]
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+for samples 
+\begin_inset Formula $\left\{ (x_{n},h_{n})\right\} _{n=1}^{N}$
+\end_inset
+
+ drawn from 
+\begin_inset Formula $p(X,H)$
+\end_inset
+
+.
+ These samples come from the training set 
+\begin_inset Formula $D$
+\end_inset
+
+ and from our choice of conditional noise distribution 
+\begin_inset Formula $p(h|x)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that there are many other ways to set up a training criterion that
+ will lead to the equality (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:joint_matching_with_q"
+
+\end_inset
+
+).
+ The KL divergence is one of them.
+ In the ideal situation in which our model 
+\begin_inset Formula $ $
+\end_inset
+
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula ${\color{blue}q(x|h)}$
+\end_inset
+
+ has the required capacity and in which the training is achieving the global
+ minimum, all those criterions are equivalent because they always yield
+ the same 
+\begin_inset Formula ${\color{blue}q(x|h)}\eqd p(x|h)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+However, they fail differently in reality, so it's worth thinking about
+ other alternatives.
+ This is especially true if we select 
+\begin_inset Formula ${\color{blue}q(x|h)}$
+\end_inset
+
+ to have certain properties which disqualifies it from learning all possible
+ distributions, or even from learning a multimodal distribution.
+\end_layout
+
+\begin_layout Subsection*
+Discussed alternative
+\end_layout
+
+\begin_layout Standard
+We will explain here how it would be possible to think instead about the
+ minimization of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\textrm{KL}\left(\pi\left\Vert K\pi\right.\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where 
+\begin_inset Formula $\pi$
+\end_inset
+
+ is a probability measure and 
+\begin_inset Formula $K$
+\end_inset
+
+ is the transition operator of a Markov chain.
+ In that setup, we start with a dataset 
+\begin_inset Formula $D$
+\end_inset
+
+ drawn from 
+\begin_inset Formula $\pi$
+\end_inset
+
+ and we want to learn 
+\begin_inset Formula $K$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+One immediate problem is that it would be possible to learn the identity
+ as transition operator.
+ One thing that should help in preventing this is that we will factor the
+ transition operator into two conditional distributions 
+\begin_inset Formula $f(h|x)$
+\end_inset
+
+ and 
+\begin_inset Formula $g(x|h)$
+\end_inset
+
+ that involve an intermediate hidden representation 
+\begin_inset Formula $h$
+\end_inset
+
+ in some other space to be chosen (possibly projecting into a space of lower
+ dimension).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let 
+\begin_inset Formula $p(x)$
+\end_inset
+
+ be the density function of the experimental data 
+\begin_inset Formula $D$
+\end_inset
+
+.
+ We define
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+q(x)\eqdef\int_{\tilde{x}}p(\tilde{x})\int_{h}f(h|\tilde{x})g(x|h)dhd\tilde{x}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+be the distribution that results from applying the transition operator 
+\begin_inset Formula $K(\tilde{x},x)=\int_{h}f(h|\tilde{x})g(x|h)dh$
+\end_inset
+
+ to the initial distribution 
+\begin_inset Formula $p(x)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+We can now focus on maximizing
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\int p(x)\log q(x)dx
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+by using gradient descent on some 
+\begin_inset Formula $\theta$
+\end_inset
+
+ that parameterizes 
+\begin_inset Formula $g_{\theta}(x|h)$
+\end_inset
+
+ and some 
+\begin_inset Formula $\tau$
+\end_inset
+
+ that parameterizes 
+\begin_inset Formula $f_{\tau}(h|x)$
+\end_inset
+
+.
+ We will derive both update formulas separately.
+ In both cases we will make use of samples 
+\begin_inset Formula $E=\left\{ (\tilde{x}_{n},h_{n})\right\} _{n=1}^{N}$
+\end_inset
+
+ where 
+\begin_inset Formula $\tilde{x}_{n}$
+\end_inset
+
+ is drawn from our experimental data 
+\begin_inset Formula $D$
+\end_inset
+
+ and where 
+\begin_inset Formula $h_{n}\sim f(\cdot|\tilde{x}_{n})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename basic_xtilden_hn_x.png
+	width 5cm
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial}{\partial\theta}\log q(x) & = & \frac{1}{q(x)}\int_{\tilde{x}}p(\tilde{x})\int_{h}f(h|d\tilde{x})\frac{\partial}{\partial\theta}g_{\theta}(x|h)dhd\tilde{x}\\
+ & = & \frac{1}{q(x)}\int_{\tilde{x}}p(\tilde{x})\int_{h}f(h|\tilde{x})g_{\theta}(x|h)\frac{\partial}{\partial\theta}\log g_{\theta}(x|h)dhd\tilde{x}\\
+ & = & \lim_{\left|E\right|\rightarrow\infty}\frac{1}{q(x)}\frac{1}{\left|E\right|}\sum_{(\tilde{x}_{n},h_{n})\in E}g_{\theta}(x|h_{n})\frac{\partial}{\partial\theta}\log g_{\theta}(x|h_{n})\\
+ & = & \lim_{\left|E\right|\rightarrow\infty}\frac{1}{\left|E\right|}\sum_{(\tilde{x}_{n},h_{n})\in E}\frac{g_{\theta}(x|h_{n})}{q(x)}\frac{\partial}{\partial\theta}\log g_{\theta}(x|h_{n})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that since 
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{1}{\left|E\right|}\sum_{(\tilde{x}_{n},h_{n})\in E}g_{\theta}(x|h_{n})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+is the empirical estimate of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\int p(\tilde{x})\int_{h}f(h|\tilde{x})g_{\theta}(x|h)dhd\tilde{x}=q(x),
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+we have that the values of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\omega(x,h_{n})\eqdef g_{\theta}(x|h_{n})/q(x)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+are such that
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\lim_{\left|E\right|\rightarrow\infty}\frac{1}{\left|E\right|}\sum_{(\tilde{x}_{n},h_{n})\in E}\omega(x,h_{n})=1.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In practice, this means that, for a given 
+\begin_inset Formula $x$
+\end_inset
+
+, we can take a resonable number of 
+\begin_inset Formula $\tilde{x}_{n}\in D$
+\end_inset
+
+ and 
+\begin_inset Formula $h_{n}\sim f(\cdot|\tilde{x}_{n})$
+\end_inset
+
+, compute the values
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\tilde{\omega}(x,h_{n})=g_{\theta}(x|h_{n})
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+and then normalize them
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\omega(x,h_{n})=\frac{\tilde{\omega}(x,h_{n})}{\sum_{n=1}^{N}\tilde{\omega}(x,h_{n})}.
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Obviously, we should try hard to find values of 
+\begin_inset Formula $h_{n}$
+\end_inset
+
+ that will yield large contributions to 
+\begin_inset Formula $\frac{\partial}{\partial\theta}\log g_{\theta}(x|h_{n})$
+\end_inset
+
+ in order to avoid computational waste.
+ This presents a challenge.
+ By addressing that issue, we hope that this will turn the training of 
+\begin_inset Formula $K(\tilde{x},x)$
+\end_inset
+
+ into more of a ''local'' problem (i.e.
+ every point 
+\begin_inset Formula $x$
+\end_inset
+
+ in the training dataset is looking to be explained by some precursor 
+\begin_inset Formula $h$
+\end_inset
+
+ and it backpropagates its corresponding gradient with more intensity to
+ the best potential candidates 
+\begin_inset Formula $h$
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After computing 
+\begin_inset Formula $\omega(x,h_{n})$
+\end_inset
+
+, we use those values in the gradient formula
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\partial}{\partial\theta}\log q(x)=\lim_{N\rightarrow\infty}\sum_{n=1}^{N}\omega(x,h_{n})\frac{\partial}{\partial\theta}\log g_{\theta}(x|h_{n}).
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Exactly the same steps can be done with 
+\begin_inset Formula $\tau$
+\end_inset
+
+ to get the gradient with respect to the parameters of 
+\begin_inset Formula $f_{\tau}(h|\tilde{x})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{\partial}{\partial\tau}\log q(x) & = & \frac{1}{q(x)}\int_{\tilde{x}}p(\tilde{x})\int_{h}\left[\frac{\partial}{\partial\theta}f_{\tau}(h|\tilde{x})\right]g(x|h)dhd\tilde{x}\\
+ & = & \frac{1}{q(x)}\int_{\tilde{x}}p(\tilde{x})\int_{h}f_{\tau}(h|\tilde{x})g(x|h)\frac{\partial}{\partial\tau}\log f_{\tau}(h|\tilde{x})dhd\tilde{x}\\
+ & = & \lim_{\left|E\right|\rightarrow\infty}\frac{1}{q(x)}\frac{1}{\left|E\right|}\sum_{(\tilde{x}_{n},h_{n})\in E}g(x|h_{n})\frac{\partial}{\partial\tau}\log f_{\tau}(h_{n}|\tilde{x}_{n})\\
+ & = & \lim_{\left|E\right|\rightarrow\infty}\frac{1}{\left|E\right|}\sum_{(\tilde{x}_{n},h_{n})\in E}\frac{g(x|h_{n})}{q(x)}\frac{\partial}{\partial\tau}\log f_{\tau}(h_{n}|\tilde{x_{n}})\\
+ & = & \lim_{N\rightarrow\infty}\sum_{n=1}^{N}\omega(x,h_{n})\frac{\partial}{\partial\tau}\log f_{\tau}(h_{n}|\tilde{x_{n}})
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally, we can use this for the empirical estimates of
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+\frac{1}{\left|D\right|}\sum_{x\in D}\frac{\partial}{\partial\theta}\log q(x) & \underset{\left|D\right|\rightarrow\infty}{\eqras} & \frac{\partial}{\partial\theta}\textrm{KL}\left(p\|q\right)\\
+\frac{1}{\left|D\right|}\sum_{x\in D}\frac{\partial}{\partial\tau}\log q(x) & \underset{\left|D\right|\rightarrow\infty}{\eqras} & \frac{\partial}{\partial\tau}\textrm{KL}\left(p\|q\right).
+\end{eqnarray*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Phantom VPhantom
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
